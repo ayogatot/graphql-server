@@ -4,6 +4,11 @@ const { ApolloServer } = require("apollo-server");
 const gql = require("graphql-tag");
 const mongoose = require("mongoose");
 
+// Setting Enviroment Variable for Mongo
+const PORT = process.env.PORT;
+const HOST = process.env.HOST;
+
+// Construct a schema, using GraphQL schema language
 const typeDefs = gql`
   type Query {
     sayHi: String!
@@ -22,10 +27,10 @@ const server = new ApolloServer({
 });
 
 mongoose
-  .connect(process.env.HOST, { useNewUrlParser: true })
+  .connect(HOST, { useNewUrlParser: true })
   .then(() => {
     console.log("MongoDB Connected");
-    return server.listen({ port: 5000 });
+    return server.listen({ port: PORT || 5000 });
   })
   .then(res => {
     console.log("server running");
