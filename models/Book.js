@@ -1,16 +1,16 @@
 const { model, Schema } = require("mongoose");
 
-const bookSchema = {
+const bookSchema = new Schema({
   title: String,
   author: String,
   createdAt: {
     type: Date,
     default: Date.now()
   },
-  updateddAt: {
+  updatedAt: {
     type: Date,
     default: Date.now()
   }
-};
+});
 
 module.exports = model("books", bookSchema);
