@@ -5,5 +5,8 @@ const orderResolver = require("./orders");
 module.exports = {
   Query: {
     ...bookResolver.Query
+  },
+  Mutation: {
+    ...userResolver.Mutation
   }
 };

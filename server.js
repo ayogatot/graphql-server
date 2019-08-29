@@ -24,3 +24,4 @@ mongoose
   .then(res => {
     console.log("server running");
   });
+mongoose.set("useCreateIndex", true);
