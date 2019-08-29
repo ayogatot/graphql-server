@@ -1,41 +1,14 @@
 require("dotenv").config();
 
 const { ApolloServer } = require("apollo-server");
-const gql = require("graphql-tag");
 const mongoose = require("mongoose");
 
-const bookModels = require("./models/Book");
+const typeDefs = require("./graphql/typeDefs");
+const resolvers = require("./graphql/resolvers");
 
 // Setting Enviroment Variable for Mongo
 const PORT = process.env.PORT;
 const HOST = process.env.HOST;
-
-// Construct a schema, using GraphQL schema language
-const typeDefs = gql`
-  type books {
-    id: ID!
-    title: String!
-    author: String!
-    createdAt: String!
-    updatedAt: String!
-  }
-  type Query {
-    getBook: [books]
-  }
-`;
-
-const resolvers = {
-  Query: {
-    getBook: async () => {
-      try {
-        const books = await bookModels.find();
-        return books;
-      } catch (err) {
-        throw new Error(err);
-      }
-    }
-  }
-};
 
 const server = new ApolloServer({
   typeDefs,
