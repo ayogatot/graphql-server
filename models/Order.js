@@ -13,14 +13,8 @@ const orderSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "books"
   },
-  createdAt: {
-    type: Date,
-    default: Date.now()
-  },
-  updateddAt: {
-    type: Date,
-    default: Date.now()
-  }
+  createdAt: String,
+  updateddAt: String
 });
 
 module.exports = model("orders", orderSchema);
