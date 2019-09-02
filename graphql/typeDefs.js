@@ -23,7 +23,8 @@ module.exports = gql`
     confirmPassword: String!
   }
   type Query {
-    getBook: [Books]
+    getAllBooks: [Books]
+    getBookById(bookId: ID!): Books
   }
   type Mutation {
     register(registerInput: RegisterInput): User!
