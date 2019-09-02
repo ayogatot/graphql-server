@@ -3,6 +3,18 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../../models/User");
 
+const generateToken = payload => {
+  return jwt.sign(
+    {
+      id: payload.id,
+      email: payload.email,
+      username: payload.username
+    },
+    process.env.SECRET_KEY,
+    { expiresIn: "3h" }
+  );
+};
+
 module.exports = {
   Mutation: {
     register: async (
@@ -28,21 +40,38 @@ module.exports = {
       });
       const saveUser = await newUser.save();
 
-      const token = jwt.sign(
-        {
-          id: saveUser.id,
-          email: saveUser.email,
-          username: saveUser.username
-        },
-        process.env.SECRET_KEY,
-        { expiresIn: "3h" }
-      );
+      const token = generateToken(saveUser);
 
       return {
         ...saveUser._doc,
         id: saveUser.id,
         token
       };
+    },
+    login: async (_, { username, password }) => {
+      try {
+        if (username === "" || password === "") {
+          return new Error("Username or Password can't to be empty");
+        }
+        const user = await User.findOne({ username });
+        if (!user) {
+          return new Error("User is not found");
+        }
+
+        const isMatch = await brcyptjs.compare(password, user.password);
+        if (!isMatch) {
+          return new Error("Wrong password");
+        }
+
+        const token = generateToken(user);
+        return {
+          ...user._doc,
+          id: user.id,
+          token
+        };
+      } catch (err) {
+        return new Error(err);
+      }
     }
   }
 };
